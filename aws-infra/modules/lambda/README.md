@@ -5,6 +5,7 @@
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=0.15.1 |
 | <a name="requirement_archive"></a> [archive](#requirement\_archive) | >=2.4.2 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >=5.48.0 |
+| <a name="requirement_null"></a> [null](#requirement\_null) | 3.2.2 |
 
 ## Providers
 
@@ -12,7 +13,7 @@
 |------|---------|
 | <a name="provider_archive"></a> [archive](#provider\_archive) | >=2.4.2 |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >=5.48.0 |
-| <a name="provider_terraform"></a> [terraform](#provider\_terraform) | n/a |
+| <a name="provider_null"></a> [null](#provider\_null) | 3.2.2 |
 
 ## Modules
 
@@ -24,7 +25,7 @@ No modules.
 |------|------|
 | [aws_iam_role.iam_for_lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_lambda_function.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
-| [terraform_data.build-go-bin](https://registry.terraform.io/providers/hashicorp/terraform/latest/docs/resources/data) | resource |
+| [null_resource.build-go-bin-trigger](https://registry.terraform.io/providers/hashicorp/null/3.2.2/docs/resources/resource) | resource |
 | [archive_file.lambda](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
 | [aws_iam_policy_document.assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 

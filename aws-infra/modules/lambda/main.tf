@@ -1,5 +1,9 @@
-resource "terraform_data" "build-go-bin" {
+resource "null_resource" "build-go-bin-trigger" {
   count = var.source_code_data.command != null ? 1 : 0
+
+  triggers = {
+    always_run = timestamp()
+  }
 
   provisioner "local-exec" {
     working_dir = var.source_code_data.work_dir
@@ -36,8 +40,7 @@ data "archive_file" "lambda" {
   output_path      = "${var.source_code_data.work_dir}/${var.source_code_data.archive_bin_name}"
   output_file_mode = "0666"
 
-  depends_on = [terraform_data.build-go-bin]
-
+  depends_on = [null_resource.build-go-bin-trigger]
 }
 
 resource "aws_lambda_function" "lambda" {
@@ -46,7 +49,8 @@ resource "aws_lambda_function" "lambda" {
   role          = aws_iam_role.iam_for_lambda.arn
   handler       = var.lambda_handler
 
-  runtime = var.lambda_runtime
+  runtime          = var.lambda_runtime
+  source_code_hash = var.source_code_data.command != null ? data.archive_file.lambda[0].output_base64sha256 : null
 
   ephemeral_storage {
     size = var.ephemeral_storage
