@@ -19,40 +19,19 @@ module "dynamodb" {
 
   dynamodb = {
     table1 = {
-      name           = "test-table1"
+      name           = "userTable"
       billing_mode   = "PROVISIONED"
       read_capacity  = 5
       write_capacity = 5
-      hash_key       = "UserId"
+      hash_key       = "username"
       attribute = [
         {
-          name = "UserId"
+          name = "username"
           type = "S"
         },
       ]
-      tag_name        = "Table1"
-      tag_environment = "Production"
+      tag_name        = "userTable"
+      tag_environment = "Dev"
     },
-
-    table2 = {
-      name           = "testTable2"
-      billing_mode   = "PROVISIONED"
-      read_capacity  = 10
-      write_capacity = 10
-      hash_key       = "UserId"
-      range_key      = "GameTitle"
-      attribute = [
-        {
-          name = "UserId"
-          type = "S"
-        },
-        {
-          name = "GameTitle"
-          type = "S"
-        },
-      ]
-      tag_name        = "Table2"
-      tag_environment = "Development"
-    }
   }
 }

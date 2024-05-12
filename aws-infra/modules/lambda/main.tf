@@ -12,7 +12,7 @@ resource "null_resource" "build-go-bin-trigger" {
   }
 }
 
-data "aws_iam_policy_document" "assume_role" {
+data "aws_iam_policy_document" "assume_role_lambda" {
   statement {
     effect = "Allow"
 
@@ -27,9 +27,36 @@ data "aws_iam_policy_document" "assume_role" {
 
 resource "aws_iam_role" "iam_for_lambda" {
   name               = "iam_for_lambda"
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.assume_role_lambda.json
 
   inline_policy {}
+}
+
+resource "aws_iam_policy" "dynamodb_policy" {
+  name        = "lambda_dynamodb_policy"
+  description = "Allows Lambda functions to execute read and write operations in DynamoDB"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:Scan",
+          "dynamodb:Query"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "dynamodb_policy_attachment" {
+  role       = aws_iam_role.iam_for_lambda.name
+  policy_arn = aws_iam_policy.dynamodb_policy.arn
 }
 
 data "archive_file" "lambda" {
