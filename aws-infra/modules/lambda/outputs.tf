@@ -1,14 +1,11 @@
 output "lambda_arn" {
-  description = "Lambda ARN"
-  value       = aws_lambda_function.lambda.arn
-}
-
-output "lambda_invoke_arn" {
-  description = "Lambda Invoke ARN"
-  value       = aws_lambda_function.lambda.invoke_arn
-}
-
-output "lambda_function_name" {
-  description = "Lambda Function Name"
-  value       = aws_lambda_function.lambda.function_name
+  description = "Lambda ARN-s and name"
+  value = {
+    for key, _ in var.lambda_config :
+    key => {
+      lambda_name = aws_lambda_function.lambda[key].function_name
+      lambda_arn  = aws_lambda_function.lambda[key].arn
+      invoke_arn  = aws_lambda_function.lambda[key].invoke_arn
+    }
+  }
 }

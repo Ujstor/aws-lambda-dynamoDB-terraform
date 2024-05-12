@@ -1,16 +1,6 @@
 output "lambda_arn" {
-  description = "Lambda ARN"
+  description = "Lambda ARN-s and name"
   value       = module.lambda.lambda_arn
-}
-
-output "lambda_invoke_arn" {
-  description = "Lambda Invoke ARN"
-  value       = module.lambda.lambda_invoke_arn
-}
-
-output "lambda_function_name" {
-  description = "Lambda Function Name"
-  value       = module.lambda.lambda_function_name
 }
 
 output "Dynamodb_arn" {

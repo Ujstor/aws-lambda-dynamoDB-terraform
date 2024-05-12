@@ -1,14 +1,14 @@
 resource "null_resource" "build-go-bin-trigger" {
-  count = var.source_code_data.command != null ? 1 : 0
+  for_each = var.lambda_config
 
   triggers = {
     always_run = timestamp()
   }
 
   provisioner "local-exec" {
-    working_dir = var.source_code_data.work_dir
-    command     = var.source_code_data.command
-    interpreter = var.source_code_data.interpreter
+    working_dir = each.value.work_dir
+    command     = each.value.command
+    interpreter = each.value.interpreter
   }
 }
 
@@ -60,28 +60,30 @@ resource "aws_iam_role_policy_attachment" "dynamodb_policy_attachment" {
 }
 
 data "archive_file" "lambda" {
-  count = var.source_code_data.command != null ? 1 : 0
+  for_each = var.lambda_config
 
-  type             = var.source_code_data.archive_type
-  source_file      = "${var.source_code_data.work_dir}/${var.source_code_data.bin_name}"
-  output_path      = "${var.source_code_data.work_dir}/${var.source_code_data.archive_bin_name}"
+  type             = each.value.archive_type
+  source_file      = "${each.value.work_dir}/${each.value.bin_name}"
+  output_path      = "${each.value.work_dir}/${each.value.archive_bin_name}"
   output_file_mode = "0666"
 
   depends_on = [null_resource.build-go-bin-trigger]
 }
 
 resource "aws_lambda_function" "lambda" {
-  filename      = "${var.source_code_data.work_dir}/${var.source_code_data.archive_bin_name}"
-  function_name = var.lambda_function_name
-  role          = aws_iam_role.iam_for_lambda.arn
-  handler       = var.lambda_handler
+  for_each = var.lambda_config
 
-  runtime          = var.lambda_runtime
-  source_code_hash = var.source_code_data.command != null ? data.archive_file.lambda[0].output_base64sha256 : null
+  filename         = "${each.value.work_dir}/${each.value.archive_bin_name}"
+  function_name    = each.value.function_name
+  role             = aws_iam_role.iam_for_lambda.arn
+  handler          = each.value.handler
+  runtime          = each.value.runtime
+  source_code_hash = data.archive_file.lambda[each.key].output_base64sha256
 
   ephemeral_storage {
-    size = var.ephemeral_storage
+    size = each.value.ephemeral_storage
   }
 
   depends_on = [data.archive_file.lambda]
 }
+
