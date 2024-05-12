@@ -14,17 +14,45 @@ module "lambda" {
   lambda_handler       = "main"
 }
 
-output "lambda_arn" {
-  description = "Lambda ARN"
-  value       = module.lambda.lambda_arn
-}
+module "dynamodb" {
+  source = "./modules/dynamoDB"
 
-output "lambda_invoke_arn" {
-  description = "Lambda Invoke ARN"
-  value       = module.lambda.lambda_invoke_arn
-}
+  dynamodb = {
+    table1 = {
+      name           = "test-table1"
+      billing_mode   = "PROVISIONED"
+      read_capacity  = 5
+      write_capacity = 5
+      hash_key       = "UserId"
+      attribute = [
+        {
+          name = "UserId"
+          type = "S"
+        },
+      ]
+      tag_name        = "Table1"
+      tag_environment = "Production"
+    },
 
-output "lambda_function_name" {
-  description = "Lambda Function Name"
-  value       = module.lambda.lambda_function_name
+    table2 = {
+      name           = "testTable2"
+      billing_mode   = "PROVISIONED"
+      read_capacity  = 10
+      write_capacity = 10
+      hash_key       = "UserId"
+      range_key      = "GameTitle"
+      attribute = [
+        {
+          name = "UserId"
+          type = "S"
+        },
+        {
+          name = "GameTitle"
+          type = "S"
+        },
+      ]
+      tag_name        = "Table2"
+      tag_environment = "Development"
+    }
+  }
 }
