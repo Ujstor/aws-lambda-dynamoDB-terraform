@@ -87,3 +87,16 @@ resource "aws_lambda_function" "lambda" {
   depends_on = [data.archive_file.lambda]
 }
 
+resource "aws_lambda_alias" "lambda_alias" {
+  for_each = {
+    for name, config in var.lambda_config : name => config if config.tag_name != null
+  }
+
+  name             = each.value.tag_name
+  description      = each.value.tag_description
+  function_name    = aws_lambda_function.lambda[each.key].arn
+  function_version = each.value.tag_function_version
+
+  depends_on = [aws_lambda_function.lambda]
+}
+

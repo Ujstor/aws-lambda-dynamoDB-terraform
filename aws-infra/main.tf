@@ -13,22 +13,27 @@ module "lambda" {
       archive_type      = "zip"
       command           = "GOOS=linux GOARCH=amd64 go build -o bootstrap"
       interpreter       = ["/bin/bash", "-c"]
+      # tag_name             = "func1"
+      # tag_description      = "createuser"
+      # tag_function_version = "$LATEST"
     }
     "function2" = {
-      work_dir          = "../lambda/"
-      bin_name          = "bootstrap"
-      archive_bin_name  = "function.zip"
-      function_name     = "test-function-2"
-      handler           = "main"
-      runtime           = "provided.al2023"
-      ephemeral_storage = "512"
-      archive_type      = "zip"
-      command           = "GOOS=linux GOARCH=amd64 go build -o bootstrap"
-      interpreter       = ["/bin/bash", "-c"]
+      work_dir             = "../lambda/"
+      bin_name             = "bootstrap"
+      archive_bin_name     = "function.zip"
+      function_name        = "test-function-2"
+      handler              = "main"
+      runtime              = "provided.al2023"
+      ephemeral_storage    = "512"
+      archive_type         = "zip"
+      command              = "GOOS=linux GOARCH=amd64 go build -o bootstrap"
+      interpreter          = ["/bin/bash", "-c"]
+      tag_name             = "func2"
+      tag_description      = "createuser"
+      tag_function_version = "$LATEST"
     }
   }
 }
-
 
 module "dynamodb" {
   source = "./modules/dynamoDB"
