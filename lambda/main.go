@@ -19,7 +19,7 @@ func main() {
 		default:
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusNotFound,
-				Body:       "Not found",
+				Body:       "Not found - from Lambda",
 			}, nil
 
 		}
