@@ -1,12 +1,18 @@
 resource "aws_apigatewayv2_api" "my_api" {
   name          = var.api_gw_conf.name
   protocol_type = var.api_gw_conf.protocol_type
+
+  cors_configuration {
+    allow_headers = ["content-type", "authorization"]
+    allow_methods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    allow_origins = ["*"]
+  }
 }
 
 resource "aws_apigatewayv2_stage" "lambda" {
   api_id = aws_apigatewayv2_api.my_api.id
 
-  name        = "dev"
+  name        = "$default"
   auto_deploy = true
 
   access_log_settings {
@@ -62,6 +68,7 @@ resource "aws_lambda_permission" "apigateway_permission" {
 
   source_arn = "${aws_apigatewayv2_api.my_api.execution_arn}/*/*/*"
 }
+
 resource "aws_apigatewayv2_authorizer" "lambda_authorizer" {
   for_each = var.lambda_integration_route_premission
 

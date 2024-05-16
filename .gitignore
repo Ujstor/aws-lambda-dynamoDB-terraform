@@ -31,3 +31,5 @@ override.tf.json
 
 bootstrap
 *.zip
+
+lambda-2/

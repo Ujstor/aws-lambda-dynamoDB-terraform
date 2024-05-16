@@ -16,7 +16,7 @@ module "lambda" {
       tag_name             = "dev"
       tag_description      = "createuser"
       tag_function_version = "$LATEST"
-    }
+    },
   }
 }
 
@@ -37,7 +37,7 @@ module "dynamodb" {
         },
       ]
       tag_name        = "userTable"
-      tag_environment = "Dev"
+      tag_environment = "dev"
     },
   }
 }
@@ -60,7 +60,7 @@ module "api_gateway" {
       authorizer_uri                    = module.lambda.lambda_arn["function1"].invoke_arn
       indentity_sources                 = ["$request.header.Authorization"]
       authorizer_name                   = "example-authorizer"
-      authorizer_payload_format_version = "2.0"
-    }
+      authorizer_payload_format_version = "1.0"
+    },
   }
 }
