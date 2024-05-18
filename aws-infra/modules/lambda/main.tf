@@ -12,6 +12,17 @@ resource "null_resource" "build-go-bin-trigger" {
   }
 }
 
+data "archive_file" "lambda" {
+  for_each = var.lambda_config
+
+  type             = each.value.archive_type
+  source_file      = "${each.value.work_dir}/${each.value.bin_name}"
+  output_path      = "${each.value.work_dir}/${each.value.archive_bin_name}"
+  output_file_mode = "0666"
+
+  depends_on = [null_resource.build-go-bin-trigger]
+}
+
 data "aws_iam_policy_document" "assume_role_lambda" {
   statement {
     effect = "Allow"
@@ -57,17 +68,6 @@ resource "aws_iam_policy" "dynamodb_policy" {
 resource "aws_iam_role_policy_attachment" "dynamodb_policy_attachment" {
   role       = aws_iam_role.iam_for_lambda.name
   policy_arn = aws_iam_policy.dynamodb_policy.arn
-}
-
-data "archive_file" "lambda" {
-  for_each = var.lambda_config
-
-  type             = each.value.archive_type
-  source_file      = "${each.value.work_dir}/${each.value.bin_name}"
-  output_path      = "${each.value.work_dir}/${each.value.archive_bin_name}"
-  output_file_mode = "0666"
-
-  depends_on = [null_resource.build-go-bin-trigger]
 }
 
 resource "aws_lambda_function" "lambda" {
