@@ -11,7 +11,7 @@ variable "api_gw_conf" {
     protocol_type = string
   })
   default = {
-    name          = "api-gw-conf"
+    name          = "api-gw"
     protocol_type = "HTTP"
   }
 }

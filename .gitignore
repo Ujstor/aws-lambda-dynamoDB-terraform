@@ -32,5 +32,4 @@ override.tf.json
 bootstrap
 *.zip
 
-lambda-2/
 lambda_source_code.tf

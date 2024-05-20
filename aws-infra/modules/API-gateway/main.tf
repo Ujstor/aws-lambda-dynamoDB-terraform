@@ -1,5 +1,6 @@
-resource "aws_apigatewayv2_api" "my_api" {
-  name          = var.api_gw_conf.name
+resource "aws_apigatewayv2_api" "lambda_api" {
+  for_each      = var.lambda_integration_route_premission
+  name          = "${each.key}-api"
   protocol_type = var.api_gw_conf.protocol_type
 
   cors_configuration {
@@ -10,13 +11,14 @@ resource "aws_apigatewayv2_api" "my_api" {
 }
 
 resource "aws_apigatewayv2_stage" "lambda" {
-  api_id = aws_apigatewayv2_api.my_api.id
+  for_each = var.lambda_integration_route_premission
+  api_id   = aws_apigatewayv2_api.lambda_api[each.key].id
 
   name        = "$default"
   auto_deploy = true
 
   access_log_settings {
-    destination_arn = aws_cloudwatch_log_group.api_gw.arn
+    destination_arn = aws_cloudwatch_log_group.api_gw[each.key].arn
 
     format = jsonencode({
       requestId               = "$context.requestId"
@@ -35,7 +37,8 @@ resource "aws_apigatewayv2_stage" "lambda" {
 }
 
 resource "aws_cloudwatch_log_group" "api_gw" {
-  name = "/aws/api_gw/${aws_apigatewayv2_api.my_api.name}"
+  for_each = var.lambda_integration_route_premission
+  name     = "/aws/api_gw/${aws_apigatewayv2_api.lambda_api[each.key].name}"
 
   retention_in_days = 30
 }
@@ -43,7 +46,7 @@ resource "aws_cloudwatch_log_group" "api_gw" {
 resource "aws_apigatewayv2_integration" "lambda_integration" {
   for_each = var.lambda_integration_route_premission
 
-  api_id             = aws_apigatewayv2_api.my_api.id
+  api_id             = aws_apigatewayv2_api.lambda_api[each.key].id
   integration_type   = each.value.integration_type
   integration_uri    = each.value.lambda_invoke_arn
   integration_method = each.value.integration_method
@@ -53,7 +56,7 @@ resource "aws_apigatewayv2_integration" "lambda_integration" {
 resource "aws_apigatewayv2_route" "route" {
   for_each = var.lambda_integration_route_premission
 
-  api_id    = aws_apigatewayv2_api.my_api.id
+  api_id    = aws_apigatewayv2_api.lambda_api[each.key].id
   route_key = each.value.route_key
   target    = "integrations/${aws_apigatewayv2_integration.lambda_integration[each.key].id}"
 }
@@ -66,13 +69,13 @@ resource "aws_lambda_permission" "apigateway_permission" {
   function_name = each.value.lambda_func_name
   principal     = each.value.principal
 
-  source_arn = "${aws_apigatewayv2_api.my_api.execution_arn}/*/*/*"
+  source_arn = "${aws_apigatewayv2_api.lambda_api[each.key].execution_arn}/*/*/*"
 }
 
 resource "aws_apigatewayv2_authorizer" "lambda_authorizer" {
   for_each = var.lambda_integration_route_premission
 
-  api_id                            = aws_apigatewayv2_api.my_api.id
+  api_id                            = aws_apigatewayv2_api.lambda_api[each.key].id
   authorizer_type                   = each.value.authorizer_type
   authorizer_uri                    = each.value.authorizer_uri
   identity_sources                  = each.value.indentity_sources

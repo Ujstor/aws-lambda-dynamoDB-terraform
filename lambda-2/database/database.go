@@ -1,18 +1,20 @@
 package database
 
+// This is going to be the logic that directly communicates with
+// our database
+
 import (
 	"fmt"
+	"lambda-func/types"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-
-	"lambda-func/types"
 )
 
 const (
-	TABLE_NAME = "userTable-1"
+	TABLE_NAME = "userTable-2"
 )
 
 type UserStore interface {
@@ -25,7 +27,7 @@ type DynamoDBClient struct {
 	databaseStore *dynamodb.DynamoDB
 }
 
-func NewDynamoDBClient() DynamoDBClient {
+func NewDynamoDB() DynamoDBClient {
 	dbSession := session.Must(session.NewSession())
 	db := dynamodb.New(dbSession)
 
@@ -33,6 +35,11 @@ func NewDynamoDBClient() DynamoDBClient {
 		databaseStore: db,
 	}
 }
+
+// When we want to "register" a new user, we actually are:
+// - checking if a user with this username already exists in our DB
+// - if they do, we return an error
+// - if they DONT, that is when we INSERT the user into the DB
 
 func (u DynamoDBClient) DoesUserExist(username string) (bool, error) {
 	result, err := u.databaseStore.GetItem(&dynamodb.GetItemInput{
@@ -56,6 +63,7 @@ func (u DynamoDBClient) DoesUserExist(username string) (bool, error) {
 }
 
 func (u DynamoDBClient) InsertUser(user types.User) error {
+	// we are assembling our item
 	item := &dynamodb.PutItemInput{
 		TableName: aws.String(TABLE_NAME),
 		Item: map[string]*dynamodb.AttributeValue{
@@ -68,6 +76,7 @@ func (u DynamoDBClient) InsertUser(user types.User) error {
 		},
 	}
 
+	// we want to actually insert the item
 	_, err := u.databaseStore.PutItem(item)
 	if err != nil {
 		return err
@@ -79,21 +88,21 @@ func (u DynamoDBClient) InsertUser(user types.User) error {
 func (u DynamoDBClient) GetUser(username string) (types.User, error) {
 	var user types.User
 
-	result, err := u.databaseStore.GetItem((&dynamodb.GetItemInput{
+	result, err := u.databaseStore.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(TABLE_NAME),
 		Key: map[string]*dynamodb.AttributeValue{
 			"username": {
 				S: aws.String(username),
 			},
 		},
-	}))
+	})
 
 	if err != nil {
 		return user, err
 	}
 
 	if result.Item == nil {
-		return user, fmt.Errorf("user %s not found", username)
+		return user, fmt.Errorf("user not found")
 	}
 
 	err = dynamodbattribute.UnmarshalMap(result.Item, &user)

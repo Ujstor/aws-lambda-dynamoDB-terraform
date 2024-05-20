@@ -24,11 +24,11 @@
 <polygon fill="none" stroke="black" points="8,-253 8,-436 1441,-436 1441,-253 8,-253"/>
 <text text-anchor="middle" x="724.5" y="-420.8" font-family="sans-serif" font-size="14.00">module.lambda</text>
 </g>
-<!-- module.api_gateway.aws_apigatewayv2_api.my_api -->
+<!-- module.api_gateway.aws_apigatewayv2_api.lambda_api -->
 <g id="node1" class="node">
-<title>module.api_gateway.aws_apigatewayv2_api.my_api</title>
+<title>module.api_gateway.aws_apigatewayv2_api.lambda_api</title>
 <polygon fill="none" stroke="black" points="1004.5,-133 792.5,-133 792.5,-97 1004.5,-97 1004.5,-133"/>
-<text text-anchor="middle" x="898.5" y="-111.3" font-family="sans-serif" font-size="14.00">aws_apigatewayv2_api.my_api</text>
+<text text-anchor="middle" x="898.5" y="-111.3" font-family="sans-serif" font-size="14.00">aws_apigatewayv2_api.lambda_api</text>
 </g>
 <!-- module.api_gateway.aws_apigatewayv2_authorizer.lambda_authorizer -->
 <g id="node2" class="node">
@@ -36,9 +36,9 @@
 <polygon fill="none" stroke="black" points="1493,-106 1155,-106 1155,-70 1493,-70 1493,-106"/>
 <text text-anchor="middle" x="1324" y="-84.3" font-family="sans-serif" font-size="14.00">aws_apigatewayv2_authorizer.lambda_authorizer</text>
 </g>
-<!-- module.api_gateway.aws_apigatewayv2_authorizer.lambda_authorizer&#45;&gt;module.api_gateway.aws_apigatewayv2_api.my_api -->
+<!-- module.api_gateway.aws_apigatewayv2_authorizer.lambda_authorizer&#45;&gt;module.api_gateway.aws_apigatewayv2_api.lambda_api -->
 <g id="edge1" class="edge">
-<title>module.api_gateway.aws_apigatewayv2_authorizer.lambda_authorizer&#45;&gt;module.api_gateway.aws_apigatewayv2_api.my_api</title>
+<title>module.api_gateway.aws_apigatewayv2_authorizer.lambda_authorizer&#45;&gt;module.api_gateway.aws_apigatewayv2_api.lambda_api</title>
 <path fill="none" stroke="black" d="M1154.71,-98.73C1107.81,-101.72 1057.94,-104.9 1014.84,-107.65"/>
 <polygon fill="black" stroke="black" points="1014.36,-104.17 1004.61,-108.3 1014.81,-111.16 1014.36,-104.17"/>
 </g>
@@ -60,9 +60,9 @@
 <polygon fill="none" stroke="black" points="1498,-214 1150,-214 1150,-178 1498,-178 1498,-214"/>
 <text text-anchor="middle" x="1324" y="-192.3" font-family="sans-serif" font-size="14.00">aws_apigatewayv2_integration.lambda_integration</text>
 </g>
-<!-- module.api_gateway.aws_apigatewayv2_integration.lambda_integration&#45;&gt;module.api_gateway.aws_apigatewayv2_api.my_api -->
+<!-- module.api_gateway.aws_apigatewayv2_integration.lambda_integration&#45;&gt;module.api_gateway.aws_apigatewayv2_api.lambda_api -->
 <g id="edge3" class="edge">
-<title>module.api_gateway.aws_apigatewayv2_integration.lambda_integration&#45;&gt;module.api_gateway.aws_apigatewayv2_api.my_api</title>
+<title>module.api_gateway.aws_apigatewayv2_integration.lambda_integration&#45;&gt;module.api_gateway.aws_apigatewayv2_api.lambda_api</title>
 <path fill="none" stroke="black" d="M1201.39,-177.92C1184.11,-175.09 1166.59,-172.08 1150,-169 1095.79,-158.94 1035.36,-145.96 987.43,-135.25"/>
 <polygon fill="black" stroke="black" points="987.93,-131.77 977.4,-133 986.4,-138.6 987.93,-131.77"/>
 </g>
@@ -102,9 +102,9 @@
 <path fill="none" stroke="black" d="M1552.17,-34C1521.44,-34 1487.98,-34 1456.43,-34"/>
 <polygon fill="black" stroke="black" points="1456.26,-30.5 1446.26,-34 1456.26,-37.5 1456.26,-30.5"/>
 </g>
-<!-- module.api_gateway.aws_cloudwatch_log_group.api_gw&#45;&gt;module.api_gateway.aws_apigatewayv2_api.my_api -->
+<!-- module.api_gateway.aws_cloudwatch_log_group.api_gw&#45;&gt;module.api_gateway.aws_apigatewayv2_api.lambda_api -->
 <g id="edge7" class="edge">
-<title>module.api_gateway.aws_cloudwatch_log_group.api_gw&#45;&gt;module.api_gateway.aws_apigatewayv2_api.my_api</title>
+<title>module.api_gateway.aws_cloudwatch_log_group.api_gw&#45;&gt;module.api_gateway.aws_apigatewayv2_api.lambda_api</title>
 <path fill="none" stroke="black" d="M1201.86,-52C1184.43,-54.85 1166.74,-57.89 1150,-61 1095.79,-71.06 1035.36,-84.04 987.43,-94.75"/>
 <polygon fill="black" stroke="black" points="986.4,-91.4 977.4,-97 987.93,-98.23 986.4,-91.4"/>
 </g>
@@ -114,9 +114,9 @@
 <polygon fill="none" stroke="black" points="1490.5,-160 1157.5,-160 1157.5,-124 1490.5,-124 1490.5,-160"/>
 <text text-anchor="middle" x="1324" y="-138.3" font-family="sans-serif" font-size="14.00">aws_lambda_permission.apigateway_permission</text>
 </g>
-<!-- module.api_gateway.aws_lambda_permission.apigateway_permission&#45;&gt;module.api_gateway.aws_apigatewayv2_api.my_api -->
+<!-- module.api_gateway.aws_lambda_permission.apigateway_permission&#45;&gt;module.api_gateway.aws_apigatewayv2_api.lambda_api -->
 <g id="edge8" class="edge">
-<title>module.api_gateway.aws_lambda_permission.apigateway_permission&#45;&gt;module.api_gateway.aws_apigatewayv2_api.my_api</title>
+<title>module.api_gateway.aws_lambda_permission.apigateway_permission&#45;&gt;module.api_gateway.aws_apigatewayv2_api.lambda_api</title>
 <path fill="none" stroke="black" d="M1157.44,-131.45C1109.77,-128.41 1058.82,-125.16 1014.89,-122.36"/>
 <polygon fill="black" stroke="black" points="1014.96,-118.85 1004.76,-121.71 1014.52,-125.84 1014.96,-118.85"/>
 </g>
